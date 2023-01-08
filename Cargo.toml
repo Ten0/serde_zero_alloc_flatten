@@ -1,0 +1,16 @@
+[package]
+	edition = "2021"
+	name = "serde_zero_alloc_flatten"
+	version = "0.1.0"
+
+[dependencies]
+	serde = "1"
+	serde_derive = "1"
+
+[dev-dependencies]
+	criterion = "0.4"
+	serde_json = "1"
+
+[[bench]]
+	harness = false
+	name = "serde_zero_alloc_flatten_bench"
