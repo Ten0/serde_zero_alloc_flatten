@@ -1,11 +1,11 @@
-#[derive(serde_derive::Deserialize)]
+#[derive(serde_derive::Deserialize, PartialEq, Debug)]
 #[allow(unused)]
 struct A {
 	a: i32,
 	#[serde(flatten)]
 	b: B,
 }
-#[derive(serde_derive::Deserialize)]
+#[derive(serde_derive::Deserialize, PartialEq, Debug)]
 #[allow(unused)]
 struct B {
 	d: usize,
@@ -14,10 +14,11 @@ struct B {
 const FLATTEN_JSON: &str = include_str!("../benches/flatten.json");
 #[test]
 fn zero_alloc_flatten() {
-	better_deserialize_for_a::deserialize(&mut serde_json::Deserializer::from_str(FLATTEN_JSON)).unwrap();
+	let res = zero_alloc_deserialize_for_a::deserialize(&mut serde_json::Deserializer::from_str(FLATTEN_JSON)).unwrap();
+	assert_eq!(A { a: 3, b: B { d: 12 } }, res);
 }
 
-mod better_deserialize_for_a {
+mod zero_alloc_deserialize_for_a {
 	use super::{A, B};
 
 	pub(crate) fn deserialize<'de, D>(__deserializer: D) -> Result<A, D::Error>

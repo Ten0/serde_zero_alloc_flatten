@@ -32,10 +32,10 @@ fn vanilla_flatten(s: &str) -> A {
 }
 
 fn zero_alloc_flatten(s: &str) -> A {
-	better_deserialize_for_a::deserialize(&mut serde_json::Deserializer::from_str(s)).unwrap()
+	zero_alloc_deserialize_for_a::deserialize(&mut serde_json::Deserializer::from_str(s)).unwrap()
 }
 
-mod better_deserialize_for_a {
+mod zero_alloc_deserialize_for_a {
 	use super::{A, B};
 
 	pub(crate) fn deserialize<'de, D>(__deserializer: D) -> Result<A, D::Error>
