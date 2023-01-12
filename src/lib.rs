@@ -60,6 +60,10 @@ impl<'f, 'de, D: Deserializer<'de>, F: FlattenSpec<'de>> Deserializer<'de> for F
 		})
 	}
 
+	// TODO support enums
+	// TODO if necessary make it work if no deserialize_xxx is called (re-drive inner)
+	//      or does serde require that this is never the case?
+
 	serde::forward_to_deserialize_any! {
 		bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
 		bytes byte_buf option unit unit_struct newtype_struct seq tuple
