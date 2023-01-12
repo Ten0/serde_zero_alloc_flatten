@@ -45,7 +45,7 @@ impl<'f, 'de, D: Deserializer<'de>, F: FlattenSpec<'de>> Deserializer<'de> for F
 		V: Visitor<'de>,
 	{
 		self.inner.deserialize_map(DeserializeMapOrStructVisitor {
-			struct_visitor: visitor,
+			inner_struct_or_map_visitor: visitor,
 			flatten_spec: self.flatten_spec,
 		})
 	}
@@ -55,7 +55,7 @@ impl<'f, 'de, D: Deserializer<'de>, F: FlattenSpec<'de>> Deserializer<'de> for F
 		V: Visitor<'de>,
 	{
 		self.inner.deserialize_map(DeserializeMapOrStructVisitor {
-			struct_visitor: visitor,
+			inner_struct_or_map_visitor: visitor,
 			flatten_spec: self.flatten_spec,
 		})
 	}
@@ -68,7 +68,7 @@ impl<'f, 'de, D: Deserializer<'de>, F: FlattenSpec<'de>> Deserializer<'de> for F
 }
 
 struct DeserializeMapOrStructVisitor<'f, V, F> {
-	struct_visitor: V,
+	inner_struct_or_map_visitor: V,
 	flatten_spec: &'f mut F,
 }
 
@@ -88,7 +88,7 @@ impl<'f, 'de, V: Visitor<'de>, F: FlattenSpec<'de>> Visitor<'de> for Deserialize
 			finished: false,
 			flatten_spec: self.flatten_spec,
 		};
-		let res = self.struct_visitor.visit_map(&mut flatten_map_access)?;
+		let res = self.inner_struct_or_map_visitor.visit_map(&mut flatten_map_access)?;
 		if !flatten_map_access.finished {
 			while let Some(key) = flatten_map_access.inner.next_key::<F::Key>()? {
 				flatten_map_access
