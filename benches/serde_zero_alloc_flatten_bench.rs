@@ -1,9 +1,20 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 fn criterion_benchmark(c: &mut Criterion) {
-	let mut group = c.benchmark_group("flatten");
-	group.bench_with_input("vanilla", FLATTEN_JSON, |b, j| b.iter(|| vanilla_flatten(black_box(j))));
-	group.bench_with_input("zero_alloc", FLATTEN_JSON, |b, j| {
+	let mut group = c.benchmark_group("regular");
+	group.bench_with_input("vanilla", REGULAR_CASE_JSON, |b, j| {
+		b.iter(|| vanilla_flatten(black_box(j)))
+	});
+	group.bench_with_input("zero_alloc", REGULAR_CASE_JSON, |b, j| {
+		b.iter(|| zero_alloc_flatten(black_box(j)))
+	});
+	group.finish();
+
+	let mut group = c.benchmark_group("worse_case");
+	group.bench_with_input("vanilla", WORSE_CASE_JSON, |b, j| {
+		b.iter(|| vanilla_flatten(black_box(j)))
+	});
+	group.bench_with_input("zero_alloc", WORSE_CASE_JSON, |b, j| {
 		b.iter(|| zero_alloc_flatten(black_box(j)))
 	});
 	group.finish();
@@ -12,7 +23,8 @@ fn criterion_benchmark(c: &mut Criterion) {
 criterion_group!(benches, criterion_benchmark);
 criterion_main!(benches);
 
-const FLATTEN_JSON: &str = include_str!("flatten.json");
+const REGULAR_CASE_JSON: &str = include_str!("regular_case.json");
+const WORSE_CASE_JSON: &str = include_str!("worse_case.json");
 
 #[derive(serde_derive::Deserialize)]
 #[allow(unused)]

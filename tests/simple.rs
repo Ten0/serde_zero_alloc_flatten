@@ -11,7 +11,7 @@ struct B {
 	d: usize,
 }
 
-const FLATTEN_JSON: &str = include_str!("../benches/flatten.json");
+const FLATTEN_JSON: &str = include_str!("../benches/worse_case.json");
 #[test]
 fn zero_alloc_flatten() {
 	let res = zero_alloc_deserialize_for_a::deserialize(&mut serde_json::Deserializer::from_str(FLATTEN_JSON)).unwrap();
